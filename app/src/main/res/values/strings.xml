@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Warming</string>
+    <string name="graph_title">Graph title</string>
+    <string name="flaticon">Flaticon</string>
+    <string name="flaticon_desc">Icon edited from Good Ware\'s vector</string>
+    <string name="check">Check</string>
+    <string name="temperature_data">Temperature data</string>
+    <string name="temp_description">Temperature data was provided by Goddard Institute for Space Studies</string>
+    <string name="co2_data">CO2 data</string>
+    <string name="co2_description">CO2 data was provided by NOAA Global Monitoring Laboratory [Ed Dlugokencky and Pieter Tans]</string>
+    <string name="credits">Credits</string>
+    <string name="arctic_ice">Arctic Ice</string>
+    <string name="arctic_ice_description">Arctic ice surface data was provided by National Snow and Ice Data Center [NSIDC/NASA]</string>
+    <string name="graph_library">Graph library</string>
+    <string name="mpandroidchart_description">The visualization of the data was made possible by MPAndroidChart library by Philipp Jahoda.</string>
+</resources>
