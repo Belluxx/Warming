@@ -223,8 +223,7 @@ class MainActivity : AppCompatActivity() {
     // Low level functions for small tasks
     private fun recyclerUpdate() {
         runOnUiThread {
-            // TODO Using notifyItemInserted() would be better but doesn't work as expected.
-            recyclerView.adapter?.notifyDataSetChanged()
+            recyclerView.adapter!!.notifyItemInserted(recyclerView.adapter!!.itemCount - 1)
         }
     }
 
