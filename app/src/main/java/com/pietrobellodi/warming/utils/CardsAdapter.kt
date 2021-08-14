@@ -12,6 +12,12 @@ import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.pietrobellodi.warming.R
+import android.view.animation.Animation
+
+import android.view.animation.ScaleAnimation
+import android.view.animation.AlphaAnimation
+import androidx.constraintlayout.widget.ConstraintLayout
+
 
 /**
  * This class is the adapter for the RecyclerView that
@@ -22,6 +28,8 @@ import com.pietrobellodi.warming.R
  */
 class CardsAdapter(private val cardData: ArrayList<CardData>) :
     RecyclerView.Adapter<CardsAdapter.CardHolder>() {
+
+    private val FADE_DURATION: Long = 500
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CardHolder {
         val cardView =
@@ -63,6 +71,8 @@ class CardsAdapter(private val cardData: ArrayList<CardData>) :
         holder.chart.invalidate()
         holder.chart.setVisibleXRangeMinimum(5f)
 
+        setFadeAnimation(holder.root)
+
         logInfo("Chart <${data.title}> loaded!")
     }
 
@@ -70,7 +80,14 @@ class CardsAdapter(private val cardData: ArrayList<CardData>) :
         return cardData.size
     }
 
+    private fun setFadeAnimation(view: View) {
+        val anim = AlphaAnimation(0.0f, 1.0f)
+        anim.duration = FADE_DURATION
+        view.startAnimation(anim)
+    }
+
     class CardHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
+        val root: ConstraintLayout = cardView.findViewById(R.id.card_root)
         val titleTv: TextView = cardView.findViewById(R.id.card_title)
         val chart: LineChart = cardView.findViewById(R.id.card_chart)
     }
