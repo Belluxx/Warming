@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
                 }
 
                 override fun onAllCompleted() {
-                    setSubtitle("All data downloaded")
+                    setSubtitle("Up to date")
                 }
             }
 
