@@ -5,18 +5,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.LineData
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.pietrobellodi.warming.R
-import android.view.animation.Animation
-
-import android.view.animation.ScaleAnimation
-import android.view.animation.AlphaAnimation
-import androidx.constraintlayout.widget.ConstraintLayout
 
 
 /**
