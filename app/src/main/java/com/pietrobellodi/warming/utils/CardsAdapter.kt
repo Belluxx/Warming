@@ -70,19 +70,29 @@ class CardsAdapter(private val cardData: ArrayList<CardData>) :
 
         setFadeAnimation(holder.root)
 
-        logInfo("Chart <${data.title}> loaded!")
+        logInfo("Chart <${data.title}>(${data.chartDataset.lineWidth}px) loaded!")
     }
 
     override fun getItemCount(): Int {
         return cardData.size
     }
 
+    /**
+     * Applies a fade animation to the specified view
+     *
+     * @param view the view to which the animation will be applied
+     */
     private fun setFadeAnimation(view: View) {
         val anim = AlphaAnimation(0.0f, 1.0f)
         anim.duration = FADE_DURATION
         view.startAnimation(anim)
     }
 
+    /**
+     * This class holds all the card widgets
+     *
+     * @param cardView the main view that holds the card
+     */
     class CardHolder(cardView: View) : RecyclerView.ViewHolder(cardView) {
         val root: ConstraintLayout = cardView.findViewById(R.id.card_root)
         val titleTv: TextView = cardView.findViewById(R.id.card_title)

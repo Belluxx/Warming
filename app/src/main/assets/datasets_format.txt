@@ -1,0 +1,1 @@
+title, entries_to_drop, values_column_index, labels_column_index, graph_color, url

@@ -1,0 +1,4 @@
+Average temperature anomaly (°C),3,2,0,#FF0000,https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.csv
+CO2 concentration (ppm),1,4,0,#333333,https://datahub.io/core/co2-ppm/r/0.csv
+Glacier mass,1,1,0,#0088FF,https://datahub.io/core/glacier-mass-balance/r/0.csv
+Global sea level (mm),1,1,0,#0000FF,https://datahub.io/core/sea-level-rise/r/0.csv

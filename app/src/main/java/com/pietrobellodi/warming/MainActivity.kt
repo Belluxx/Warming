@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
@@ -17,20 +16,14 @@ import com.github.mikephil.charting.data.Entry
 import com.github.mikephil.charting.data.LineDataSet
 import com.pietrobellodi.warming.utils.CardData
 import com.pietrobellodi.warming.utils.CardsAdapter
-import com.pietrobellodi.warming.utils.DownloadQueue
+import com.pietrobellodi.warming.utils.FileDownloader
 
 
 class MainActivity : AppCompatActivity() {
 
-    // URLs
-    private val TEMPERATURE_DATA_URL =
-        "https://data.giss.nasa.gov/gistemp/graphs/graph_data/Global_Mean_Estimates_based_on_Land_and_Ocean_Data/graph.csv"
-    private val CO2_DATA_URL = "https://gml.noaa.gov/webdata/ccgg/trends/co2/co2_annmean_gl.csv"
-    private val ARCTIC_ICE_HOST = "https://climate.nasa.gov"
-    private val ARCTIC_ICE_EXTRACTION_URL = "$ARCTIC_ICE_HOST/vital-signs/arctic-sea-ice/"
-
     // Constants
     private val LINE_WIDTH = 4f
+    private val ASSET_URLS_NAME = "datasets.txt"
 
     // Variables
     private lateinit var recyclerView: RecyclerView
@@ -58,66 +51,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun init() {
-        val queue = DownloadQueue()
         if (isNetworkAvailable()) { // If the device has an internet connection
-            // Add urls to the queue
-            queue.add(TEMPERATURE_DATA_URL)
-            queue.add(CO2_DATA_URL)
-            queue.add(ARCTIC_ICE_EXTRACTION_URL)
-
-            // Setup queue's watcher and its events
-            queue.watcher = object : DownloadQueue.QueueWatcher {
-                override fun onStepCompleted(data: String, id: Int) {
-                    when (id) {
-                        0 -> {
-                            manageCsvData(
-                                data,
-                                "Average temperature anomaly (°C)",
-                                3,
-                                2,
-                                0,
-                                "#FF0000",
-                                true
-                            )
-                        }
-                        1 -> {
-                            manageCsvData(
-                                data,
-                                "CO2 concentration (ppm)",
-                                56,
-                                1,
-                                0,
-                                "#333333"
-                            )
-                        }
-                        2 -> {
-                            extractArcticIceURL(data)
-                        }
-                    }
-                }
-
-                override fun onStepError(id: Int) {
-                    when (id) {
-                        0 -> {
-                            toast("Cannot download average temperature anomaly")
-                        }
-                        1 -> {
-                            toast("Cannot download CO2 concentration")
-                        }
-                        2 -> {
-                            toast("Cannot download arctic ice area")
-                        }
-                    }
-                }
-
-                override fun onAllCompleted() {
-                    setSubtitle("Up to date")
-                }
-            }
-
-            // Start the queue
-            setSubtitle("Downloading data...")
-            queue.start()
+            startDatasetDownloads()
         } else {
             // If there is no internet connection, notify the user
             toast("No internet connection")
@@ -125,35 +60,43 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // Functions used for extraction and visualization of the data
-    private fun extractArcticIceURL(page: String) {
-        // Extract the CSV url from NASA's website
-        val pattern = "/system/internal_resources/details/original/.*\\.csv".toRegex()
-        val extractedUrl: String
-        if (page.contains(pattern)) {
-            extractedUrl = ARCTIC_ICE_HOST.plus(pattern.find(page)!!.value)
-        } else {
-            logError("Cannot extract arctic ice data")
-            return
+    private fun startDatasetDownloads() {
+        // Read datasets asset text file
+        val datasetsInfo = arrayListOf<String>()
+        application.assets.open(ASSET_URLS_NAME).bufferedReader().useLines { lines ->
+            lines.forEach {
+                datasetsInfo.add(it)
+            }
         }
 
-        // Download arctic ice data
-        val queue = DownloadQueue()
-        queue.add(extractedUrl)
-        queue.watcher = object : DownloadQueue.QueueWatcher {
-            override fun onStepCompleted(data: String, id: Int) {
-                manageCsvData(data, "Arctic ice area (million km2)", 1, 5, 0, "#0000FF")
-            }
-
-            override fun onStepError(id: Int) {
-                toast("Cannot download arctic ice area")
-            }
-
-            override fun onAllCompleted() {}
+        // Download data
+        downloadDataset(datasetsInfo.first().split(','), true)
+        for (info in datasetsInfo.drop(1)) {
+            downloadDataset(info.split(','), false)
         }
-        queue.start()
     }
 
+    private fun downloadDataset(info: List<String>, first: Boolean = false) {
+        FileDownloader(info[5], object : FileDownloader.DownloadListener {
+            override fun onDownloadCompleted(data: String) {
+                manageCsvData(
+                    data,
+                    info[0],
+                    info[1].toInt(),
+                    info[2].toInt(),
+                    info[3].toInt(),
+                    info[4],
+                    first
+                )
+            }
+
+            override fun onDownloadError(e: Exception) {
+                toast("Cannot download ${info[0]}")
+            }
+        }).download()
+    }
+
+    // Functions used for extraction and visualization of the data
     private fun manageCsvData(
         data: String,
         title: String,
@@ -188,7 +131,7 @@ class MainActivity : AppCompatActivity() {
         entries.forEach {
             val rowData = trimList(it.split(','))
             values[i] = rowData[valuesColumn].toFloat()
-            labels[i] = rowData[labelsColumn]
+            labels[i] = rowData[labelsColumn].substring(0..3)
             i++
         }
 
@@ -278,13 +221,5 @@ class MainActivity : AppCompatActivity() {
             actNw.hasTransport(NetworkCapabilities.TRANSPORT_BLUETOOTH) -> true
             else -> false
         }
-    }
-
-    private fun logInfo(s: String) {
-        Log.d("Info", ">>> INFO: $s")
-    }
-
-    private fun logError(s: String) {
-        Log.e("Error", ">>> ERROR: $s")
     }
 }
