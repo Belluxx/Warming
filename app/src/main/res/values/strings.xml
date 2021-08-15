@@ -13,4 +13,6 @@
     <string name="arctic_ice_description">Arctic ice surface data was provided by National Snow and Ice Data Center [NSIDC/NASA]</string>
     <string name="graph_library">Graph library</string>
     <string name="mpandroidchart_description">The visualization of the data was made possible by MPAndroidChart library by Philipp Jahoda.</string>
+    <string name="datahub">DataHub</string>
+    <string name="various_datasets_were_provided_by_datahub">Various datasets were provided by DataHub</string>
 </resources>

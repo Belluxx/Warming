@@ -12,7 +12,7 @@ class CreditsActivity : AppCompatActivity() {
         setContentView(R.layout.activity_credits)
 
         findViewById<Button>(R.id.flaticon_btn).setOnClickListener {
-            openURL("https://www.flaticon.com/")
+            openURL("https://www.flaticon.com/authors/good-ware")
         }
 
         findViewById<Button>(R.id.goddard_btn).setOnClickListener {
@@ -29,6 +29,10 @@ class CreditsActivity : AppCompatActivity() {
 
         findViewById<Button>(R.id.mpandroidchart_btn).setOnClickListener {
             openURL("https://github.com/PhilJay/MPAndroidChart")
+        }
+
+        findViewById<Button>(R.id.datahub_btn).setOnClickListener {
+            openURL("https://datahub.io/collections/climate-change")
         }
     }
 
