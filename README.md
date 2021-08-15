@@ -2,7 +2,7 @@
 Warming is an android app that gathers updated data about global warming/climate change and visualizes it in a clean and easy way.
 
 ## Download
-Download the [latest apk](https://github.com/Belluxx/Warming/releases/download/1.0/Warming-v1.0.apk) and install.
+Download the [latest apk](https://github.com/Belluxx/Warming/releases/download/1.1/Warming-v1.1.apk) and install.
 
 ## Contributing
 If you know APIs or datasets that are freely available online, feel free to share them with me, i will be happy to implement them in the app if possible. Or if you want you can even do a Pull Request.
