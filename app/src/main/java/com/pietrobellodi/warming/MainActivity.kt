@@ -80,14 +80,7 @@ class MainActivity : AppCompatActivity() {
         FileDownloader(info[5], object : FileDownloader.DownloadListener {
             override fun onDownloadCompleted(data: String) {
                 manageCsvData(
-                    data,
-                    info[0],
-                    info[1].toInt(),
-                    info[2].toInt(),
-                    info[3].toInt(),
-                    info[4],
-                    first
-                )
+                    data, info, first)
             }
 
             override fun onDownloadError(e: Exception) {
@@ -99,28 +92,21 @@ class MainActivity : AppCompatActivity() {
     // Functions used for extraction and visualization of the data
     private fun manageCsvData(
         data: String,
-        title: String,
-        entriesToDrop: Int,
-        valuesColumn: Int,
-        labelsColumn: Int,
-        color: String,
+        info: List<String>,
         first: Boolean = false
     ) {
-        val result = extractData(data, entriesToDrop, valuesColumn, labelsColumn, color, first)
-        createCard(title, result.first, result.second)
+        val result = extractData(data, info, first)
+        createCard(info[0], result.first, result.second)
     }
 
     private fun extractData(
         data: String,
-        entriesToDrop: Int,
-        valuesColumn: Int,
-        labelsColumn: Int,
-        color: String,
+        info: List<String>,
         first: Boolean
     ): Pair<LineDataSet, List<String>> {
         // Clean data
         var entries = data.split('\n')
-        entries = entries.drop(entriesToDrop)
+        entries = entries.drop(info[1].toInt())
         if (entries.last().isBlank()) entries = entries.dropLast(1)
 
         // Extract needed data
@@ -130,8 +116,8 @@ class MainActivity : AppCompatActivity() {
         var i = 0
         entries.forEach {
             val rowData = trimList(it.split(','))
-            values[i] = rowData[valuesColumn].toFloat()
-            labels[i] = rowData[labelsColumn].substring(0..3)
+            values[i] = rowData[info[2].toInt()].toFloat()
+            labels[i] = rowData[info[3].toInt()].substring(0..3)
             i++
         }
 
@@ -146,7 +132,7 @@ class MainActivity : AppCompatActivity() {
 
         // Customize dataset
         with(valuesDataset) {
-            this.color = Color.parseColor(color)
+            this.color = Color.parseColor(info[4])
             if (first) this.lineWidth = LINE_WIDTH else this.lineWidth = LINE_WIDTH / 2.75f
             this.mode = LineDataSet.Mode.LINEAR
 
