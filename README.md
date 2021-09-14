@@ -1,4 +1,4 @@
-# Warming
+# Warming ![GitHub release (latest by date)](https://img.shields.io/github/downloads/Belluxx/Warming/latest/total?style=for-the-badge)
 Warming is an android app that gathers updated data about global warming/climate change and visualizes it in a clean and easy way.
 
 ## Download
