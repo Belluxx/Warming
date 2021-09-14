@@ -80,7 +80,8 @@ class MainActivity : AppCompatActivity() {
         FileDownloader(info[5], object : FileDownloader.DownloadListener {
             override fun onDownloadCompleted(data: String) {
                 manageCsvData(
-                    data, info, first)
+                    data, info, first
+                )
             }
 
             override fun onDownloadError(e: Exception) {
